@@ -6,6 +6,7 @@ Anonymous peer-support chat for students, connecting them with trained senior Em
 
 **ER Connect — Anonymous Emotional Support Chat for Students**
 
+**Demo video link :** https://drive.google.com/file/d/1NGijJRDf35Ybipvjl--a2e9u7AVlCRX4/view?usp=sharing
 ## Problem Statement
 
 Students may need a private, approachable place to talk through academic or personal stress. They may hesitate to seek support if they fear being identified, judged, or unable to reach a peer responder quickly.
