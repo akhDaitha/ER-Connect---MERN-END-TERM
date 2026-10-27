@@ -1,0 +1,6 @@
+module.exports = {
+  PRIOR_WEIGHT_C: 5,
+  PRIOR_MEAN_M: 4.0,
+  AUTO_FLAG_THRESHOLD: 2.5,
+  MIN_RATINGS_FOR_FLAG: 5,
+};
