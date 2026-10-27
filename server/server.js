@@ -20,6 +20,8 @@ const reportRoutes = require('./routes/reportRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 
 const app = express();
+// Render runs behind a reverse proxy; trust its forwarded client IP for rate limiting.
+app.set('trust proxy', 1);
 const server = http.createServer(app);
 
 // Initialize Socket.io
