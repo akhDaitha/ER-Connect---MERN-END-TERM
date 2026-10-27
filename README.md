@@ -129,11 +129,11 @@ Copy `server/.env.example` to `server/.env`. Keep `.env` out of version control 
 
 ## Deployment
 
-The repository includes a Render Blueprint in `render.yaml`. It builds the React client and serves it from the Express service, so the frontend, API, and Socket.IO share one HTTPS origin. This matches the app’s HTTP-only cookie configuration.
+The repository includes a Render Blueprint in `render.yaml`. It builds the React client and serves it from the Express service, so the frontend, API, and Socket.IO share one HTTPS origin. This matches the app’s HTTP-only cookie configuration. The Blueprint service name matches the existing Render service so syncing it updates that service instead of creating a duplicate. See [Render Blueprints](https://render.com/docs/infrastructure-as-code).
 
-1. Use a MongoDB database that the Render service can reach. In MongoDB Atlas, allowlist the service’s outbound IP ranges from the Render service’s **Connect → Outbound** panel; avoid opening database access to all IPs.
-2. In Render, create a Blueprint from this GitHub repository and select the `main` branch. Review the service settings before creating it. The Blueprint uses the Free plan and generates `JWT_SECRET` for you.
-3. Supply `MONGO_URI` and `CHAT_KEY` as private Render environment variables. `CHAT_KEY` must match the key used to encrypt any existing messages in the selected database. Keep both values private and never commit them.
+1. In Render, connect the existing `ER-Connect---MERN-END-TERM` service to the Blueprint from this repository and select the `main` branch. Review the changes before syncing. The Blueprint keeps the current Free plan and region, and generates `JWT_SECRET` for you.
+2. Supply `MONGO_URI` and `CHAT_KEY` as private Render environment variables. `CHAT_KEY` must match the key used to encrypt any existing messages in the selected database. Keep both values private and never commit them.
+3. In MongoDB Atlas, allowlist the service’s outbound IP ranges from its **Connect → Outbound** panel; avoid opening database access to all IPs.
 4. After the service deploys, open its `onrender.com` URL. The health check is available at `/api/health`; the home page serves the React app.
 
 Render’s Free web services currently cost $0, but spin down after 15 minutes without traffic and can take about a minute to wake. Render describes Free instances as suitable for testing and hobby projects, not production. See [Render’s Free instance limitations](https://render.com/docs/free) and [Web Services guide](https://render.com/docs/web-services). Do not run the seed script against a production database.
