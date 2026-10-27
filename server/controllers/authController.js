@@ -167,9 +167,21 @@ const getMe = async (req, res) => {
   });
 };
 
+const getSocketToken = async (req, res) => {
+  const token = jwt.sign(
+    { id: req.user._id.toString(), role: req.user.role, purpose: 'socket' },
+    env.JWT_SECRET,
+    { expiresIn: '2m' }
+  );
+
+  res.set('Cache-Control', 'no-store');
+  return res.json({ success: true, token });
+};
+
 module.exports = {
   signup,
   login,
   logout,
-  getMe
+  getMe,
+  getSocketToken
 };

@@ -32,6 +32,9 @@ const socketAuthMiddleware = async (socket, next) => {
     }
 
     const decoded = jwt.verify(token, env.JWT_SECRET);
+    if (socket.handshake.auth?.token && decoded.purpose !== 'socket') {
+      return next(new Error('Authentication failed: Invalid socket token'));
+    }
     const user = await User.findById(decoded.id).select('-passwordHash');
 
     if (!user) {

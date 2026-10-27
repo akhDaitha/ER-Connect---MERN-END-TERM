@@ -10,5 +10,6 @@ router.post('/signup', authLimiter, validate(signupSchema), authController.signu
 router.post('/login', authLimiter, validate(loginSchema), authController.login);
 router.post('/logout', verifyToken, authController.logout);
 router.get('/me', verifyToken, authController.getMe);
+router.get('/socket-token', verifyToken, authController.getSocketToken);
 
 module.exports = router;

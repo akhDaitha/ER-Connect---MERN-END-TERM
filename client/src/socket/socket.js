@@ -7,7 +7,19 @@ export const getSocket = () => {
     socket = io('/', {
       withCredentials: true,
       autoConnect: false,
-      transports: ['polling']
+      transports: ['polling'],
+      auth: async (callback) => {
+        try {
+          const response = await fetch('/api/auth/socket-token', {
+            credentials: 'same-origin',
+            headers: { Accept: 'application/json' }
+          });
+          const result = await response.json();
+          callback({ token: response.ok ? result.token : null });
+        } catch {
+          callback({ token: null });
+        }
+      }
     });
   }
   return socket;
