@@ -7,7 +7,7 @@ export const getSocket = () => {
     socket = io('/', {
       withCredentials: true,
       autoConnect: false,
-      transports: ['websocket', 'polling']
+      transports: ['polling']
     });
   }
   return socket;
