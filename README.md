@@ -129,15 +129,14 @@ Copy `server/.env.example` to `server/.env`. Keep `.env` out of version control 
 
 ## Deployment
 
-There is no public application URL configured in this repository yet. To deploy, use a MongoDB database and host the frontend and backend behind the **same HTTPS origin**. The application uses relative `/api` and `/socket.io` URLs and secure HTTP-only cookies in production.
+The repository includes a Render Blueprint in `render.yaml`. It builds the React client and serves it from the Express service, so the frontend, API, and Socket.IO share one HTTPS origin. This matches the app’s HTTP-only cookie configuration.
 
-1. Create a production MongoDB database and allow the backend host to connect to it.
-2. Deploy the Node.js server on a host that supports persistent WebSocket connections. Configure `MONGO_URI`, a strong `JWT_SECRET`, a generated `CHAT_KEY`, `CLIENT_URL` (the frontend’s HTTPS origin), `ALLOWED_EMAIL_DOMAIN`, and `NODE_ENV=production`. Use the port supplied by the host when it provides one.
-3. Build the frontend with `cd client && npm ci && npm run build` and publish the generated `client/dist` files.
-4. Configure the frontend host or reverse proxy to serve the static frontend, forward `/api` requests to the Node server, and forward `/socket.io` with WebSocket upgrades enabled. Configure SPA fallback to `index.html` for client-side routes.
-5. Visit the frontend’s HTTPS URL. Do not run the seed script against a production database.
+1. Use a MongoDB database that the Render service can reach. In MongoDB Atlas, allowlist the service’s outbound IP ranges from the Render service’s **Connect → Outbound** panel; avoid opening database access to all IPs.
+2. In Render, create a Blueprint from this GitHub repository and select the `main` branch. Review the service settings before creating it. The Blueprint uses the Free plan and generates `JWT_SECRET` for you.
+3. Supply `MONGO_URI` and `CHAT_KEY` as private Render environment variables. `CHAT_KEY` must match the key used to encrypt any existing messages in the selected database. Keep both values private and never commit them.
+4. After the service deploys, open its `onrender.com` URL. The health check is available at `/api/health`; the home page serves the React app.
 
-For local or hosted development, see the setup instructions above. Once deployed, add the public application URL here.
+Render’s Free web services currently cost $0, but spin down after 15 minutes without traffic and can take about a minute to wake. Render describes Free instances as suitable for testing and hobby projects, not production. See [Render’s Free instance limitations](https://render.com/docs/free) and [Web Services guide](https://render.com/docs/web-services). Do not run the seed script against a production database.
 
 ## API Overview
 

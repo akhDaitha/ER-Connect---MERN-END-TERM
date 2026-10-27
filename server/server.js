@@ -3,6 +3,8 @@ const express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
+const fs = require('fs');
+const path = require('path');
 
 const env = require('./config/env');
 const connectDB = require('./config/db');
@@ -62,6 +64,17 @@ app.use('/api', (req, res) => {
   res.status(404).json({ success: false, message: 'API route not found' });
 });
 
+// Serve the built React app from the same origin in hosted deployments.
+const frontendBuildPath = path.join(__dirname, '../client/dist');
+app.use(express.static(frontendBuildPath));
+app.use((req, res, next) => {
+  const frontendIndex = path.join(frontendBuildPath, 'index.html');
+  if (req.method === 'GET' && fs.existsSync(frontendIndex)) {
+    return res.sendFile(frontendIndex);
+  }
+  return next();
+});
+
 // Global Error Handler
 app.use(errorHandler);
 
@@ -75,7 +88,7 @@ const startServer = async () => {
       console.warn('⚠️  Please add your MongoDB Atlas connection string to server/.env to use database features.');
     }
 
-    server.listen(env.PORT, () => {
+    server.listen(env.PORT, '0.0.0.0', () => {
       console.log(`===============================================`);
       console.log(`🚀 ER Connect Server running on port ${env.PORT}`);
       console.log(`🌐 Allowed Client URL: ${env.CLIENT_URL}`);

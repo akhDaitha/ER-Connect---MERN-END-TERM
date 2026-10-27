@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: er-connect-backend
+    runtime: node
+    plan: free
+    region: singapore
+    branch: main
+    buildCommand: npm ci --prefix server && npm ci --prefix client && npm run build --prefix client
+    startCommand: npm start --prefix server
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: CLIENT_URL
+        value: https://er-connect-backend.onrender.com
+      - key: MONGO_URI
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: CHAT_KEY
+        sync: false
+      - key: ALLOWED_EMAIL_DOMAIN
+        value: '@sst.scaler.com'
+      - key: MAX_CONCURRENT_CHATS_PER_ER
+        value: '3'
